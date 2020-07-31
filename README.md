@@ -5,10 +5,10 @@ Before compare, you need to check the IP of URL.
 
 ```sh
 # Build the image
-$ docker build -t networktest:0.0.1 .
+$ docker build -t networktest:0.0.2 .
 
 # Run docker container to test
-$ docker run -d --name=test networktest:0.0.1
+$ docker run -d --name=test networktest:0.0.2
 
 # login container
 $ sudo docker exec -it test sh
@@ -17,5 +17,5 @@ $ sudo docker exec -it test sh
 $ docker rm -f test
 
 # remove image
-$ docker rmi -f  networktest:0.0.1
+$ docker rmi -f  networktest:0.0.2
 ```
