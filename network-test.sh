@@ -1,6 +1,19 @@
 #!/bin/bash
 # program: A network troubleshooting tool.
-# version: 0.0.1
+# version: 0.0.2
+
+function dnsresolve() {
+    if [[ $(echo "$1" | awk '/Add/ && !/#/ && NR > 1 {print $2}' | xargs) != $2 ]]; then
+        echo "$3 lookup failure"
+    fi
+}
+
+function healthcheck() {
+    if [[ $(echo "$1" | grep HTTP/1.1 | awk {'print $2'}) != "200" ]]; then
+        echo "$2 is unhealthy"
+        echo "$1"
+    fi
+}
 
 while true
 do
@@ -10,14 +23,9 @@ do
     url=$(curl -s -S -I http://www.google.com/)
 
     ## Deciding the lookup status by checking the variable has a valid IP string.
-    if [[ $(echo "$resolvedIP") != "xxx.xxx.xxx.xxx" ]]; then
-        echo "resolvedIP lookup failure"
-    fi
+    dnsresolve "$resolvedIP"  "xxx.xxx.xxx.xxx" "google.com"
     ## If service does not return 200, echo its content.
-    if [[ $(echo "$url" | grep HTTP/1.1 | awk {'print $2'}) != "200" ]]; then
-        echo "url is unhealthy"
-        echo "$url"
-    fi
+    healthcheck "$url" "url"
 
     sleep 1
 
